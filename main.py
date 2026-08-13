@@ -82,4 +82,24 @@ def registrar_pedido(forma_pagamento, valor_total, itens):
         conexao.commit()
 
 
-registrar_pedido("dinheiro", 21.00, [(2, 1, 9.00), (27, 2, 3.00)])
+# registrar_pedido("dinheiro", 21.00, [(2, 1, 9.00), (27, 2, 3.00)])
+
+cursor.execute("""SELECT pedidos.id, pedidos.data_hora, pedidos.forma_pagamento, pedidos.valortotal, produtos.nomedoproduto, itens_pedido.quantidade, itens_pedido.valorunitario FROM pedidos
+JOIN itens_pedido ON pedidos.id = itens_pedido.pedido_id
+JOIN produtos ON itens_pedido.produto_id = produtos.id
+ORDER BY pedidos.id""")
+resultado = cursor.fetchall()
+cursor.execute("""SELECT * FROM pedidos""")
+pedidos = cursor.fetchall()
+
+for pedido in pedidos:
+    id, data_hora, forma_pagamento, valortotal = pedido
+    print(f"""Id do pedido: {id} | Data : {data_hora}""")
+    for linha in resultado:
+        pedidoid, datapedido, formapagamento_item, valortotal_item, nomedoproduto, quantidade, valorunitario = linha
+        if pedidoid == id:
+            print(
+                f"""Qtd: {quantidade} {nomedoproduto} Valor: {valorunitario} """)
+    print(
+        f"""Valor Total: {valortotal} | Forma de pagamento: {forma_pagamento}""")
+    print("\n")
