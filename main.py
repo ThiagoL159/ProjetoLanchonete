@@ -64,42 +64,59 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS itens_pedido (
                 )""")
 
 
-def registrar_pedido(forma_pagamento, valor_total, itens):
+def relatorio_dia(dia):
+    cursor.execute(
+        """SELECT valortotal, forma_pagamento, data_hora FROM pedidos WHERE date(data_hora) = date(?)""", (dia,))
+    res = cursor.fetchall()
+    return res
+
+
+def consulta_pedido(pedido_id):
+    cursor.execute("""SELECT pedidos.id, pedidos.data_hora, pedidos.forma_pagamento, pedidos.valortotal, produtos.nomedoproduto, itens_pedido.quantidade, itens_pedido.valorunitario FROM pedidos
+    JOIN itens_pedido ON pedidos.id = itens_pedido.pedido_id
+    JOIN produtos ON itens_pedido.produto_id = produtos.id
+    WHERE pedidos.id = ?""", (pedido_id,))
+    resultado = cursor.fetchall()
+
+    id, data_hora, forma_pagamento, valortotal, nomedoproduto, quantidade, valorunitario = resultado[
+        0]
+
+    print(f"""Id do pedido: {id} | Data : {data_hora}""")
+    for linha in resultado:
+        id, data_hora, forma_pagamento, valortotal, nomedoproduto, quantidade, valorunitario = linha
+        print(f"""Qtd: {quantidade} {nomedoproduto} Valor: {valorunitario} """)
+    print(
+        f"""Valor Total: {valortotal} | Forma de pagamento: {forma_pagamento}""")
+    print("\n")
+
+
+def registrar_pedido(forma_pagamento, itens):
+
+    valor_total = 0
+    for item in itens:
+        produto_id, quantidade = item
+        cursor.execute(
+            """SELECT valordoproduto FROM produtos WHERE id = ?""", (produto_id,))
+        valorunitario = cursor.fetchone()[0]
+        valor_total += quantidade * valorunitario
     cursor.execute("""INSERT INTO pedidos (forma_pagamento, valortotal) 
                     VALUES (?, ?)""", (forma_pagamento, valor_total))
 
     pedido_id = cursor.lastrowid
 
-    # itens = [
-    #     (produto_id_1, quantidade_1, valorunitario_1),
-    #     (produto_id_2, quantidade_2, valorunitario_2)
-    # ]
-
     for item in itens:
-        produto_id, quantidade, valorunitario = item
+        produto_id, quantidade = item
+        cursor.execute(
+            """SELECT valordoproduto FROM produtos WHERE id = ?""", (produto_id,))
+        valorunitario = cursor.fetchone()[0]
         cursor.execute("""INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, valorunitario)
-                    VALUES (?, ?, ?, ?)""", (pedido_id, produto_id, quantidade, valorunitario))
-        conexao.commit()
+                            VALUES (?, ?, ?, ?)""", (pedido_id, produto_id, quantidade, valorunitario))
+
+    conexao.commit()
 
 
-# registrar_pedido("dinheiro", 21.00, [(2, 1, 9.00), (27, 2, 3.00)])
+# registrar_pedido("cartao", [(11, 1), (27, 2)])
 
-cursor.execute("""SELECT pedidos.id, pedidos.data_hora, pedidos.forma_pagamento, pedidos.valortotal, produtos.nomedoproduto, itens_pedido.quantidade, itens_pedido.valorunitario FROM pedidos
-JOIN itens_pedido ON pedidos.id = itens_pedido.pedido_id
-JOIN produtos ON itens_pedido.produto_id = produtos.id
-ORDER BY pedidos.id""")
-resultado = cursor.fetchall()
-cursor.execute("""SELECT * FROM pedidos""")
-pedidos = cursor.fetchall()
+relatorio_dia("2026-08-13")
 
-for pedido in pedidos:
-    id, data_hora, forma_pagamento, valortotal = pedido
-    print(f"""Id do pedido: {id} | Data : {data_hora}""")
-    for linha in resultado:
-        pedidoid, datapedido, formapagamento_item, valortotal_item, nomedoproduto, quantidade, valorunitario = linha
-        if pedidoid == id:
-            print(
-                f"""Qtd: {quantidade} {nomedoproduto} Valor: {valorunitario} """)
-    print(
-        f"""Valor Total: {valortotal} | Forma de pagamento: {forma_pagamento}""")
-    print("\n")
+print(relatorio_dia("2026-08-13"))
