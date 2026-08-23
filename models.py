@@ -31,7 +31,7 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS produtos  (
 #     ("Ovo", 3.00),
 #     ("Carne", 5.00),
 #     ("Frango", 6.00),
-#     ("Presunto", 3.00),
+#     ("aentimento de culpa da maconha", 3.00),
 #     ("Queijo", 5.00),
 #     ("Bacon", 5.00),
 #     ("Guaravita", 3.00),
