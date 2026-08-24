@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f6;
+}
+
+.telainteira {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr 200px;
+
+}
+
+.telahistorico {
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    background-color: white;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 15px;
+
+}
+
+.telaprodutos {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.telacarrinho {
+    background-color: white;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.card-pedido {
+    height: 80px;
+    border-radius: 10px;
+    background-color: black;
+    flex-shrink: 0;
+    box-shadow: 0 4px 6px rgb(0, 0, 0, 0.05);
+    margin: 10px;
+}
+
+.busca {
+    border-radius: 15px;
+    background-color: white;
+}
+
+.comidas {
+    border-radius: 15px;
+
+}
+
+.bebidas {
+    border-radius: 15px;
+
+}
+
+.card-produto {
+    height: 100px;
+    width: 100px;
+    border-radius: 10px;
+    background-color: white;
+    flex-shrink: 0;
+}
+
+.header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.inputbusca {
+    flex-grow: 1;
+    padding: 5px;
+    border-radius: 8px;
+    border: none;
+
+}
+
+.listahorizontalbebidas,
+.listahorizontalcomidas {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.comidas h2,
+.bebidas h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+}
+
+.lista-pedido {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.item-pedido {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.resumo-pedido {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-end;
+    min-width: 350px;
+}
+
+.total-texto {
+    font-size: 25px;
+    font-weight: bold;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+.botao-confirmar {
+    background-color: #ff5722;
+    padding: 15px 30px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(255, 87, 34, 0.3);
+    transition: transform 0.2s;
+}
+
+.botao-confirmar:active {
+    transform: scale(0.95);
+}
