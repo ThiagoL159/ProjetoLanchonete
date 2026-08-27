@@ -13,9 +13,7 @@ def pedid():
     return "historico de pedidos"
 
 
-@app.route("/relatorio")
-def relator():
-    return render_template("relatorio.html")
+
 
 @app.route("/api/relatorio/dia/<string:data>")
 def get_relatorio_dia(data):
