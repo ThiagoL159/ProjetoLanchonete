@@ -310,3 +310,79 @@ body {
 .botao-confirmar:active {
     transform: scale(0.95);
 }
+
+.imagem-produto img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+}
+
+.btn-remover {
+    color: red;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.modal-fundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-conteudo {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    max-height: 80vh;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.modal-cabecalho h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.btn-fechar {
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+}
+
+.lista-detalhes {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-detalhe {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background-color: #f4f7f6;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}

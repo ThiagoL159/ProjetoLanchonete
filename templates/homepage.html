@@ -6,29 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js" defer></script>
 </head>
 
 <body>
     <div class="telainteira">
         <div class="telahistorico">
-            <div class="card-pedido">
-                <div class="pedido-cabecalho">
-                    <span class="pedido-numero">#001</span>
-                    <span class="pedido-hora">14:30</span>
-                </div>
-                <div class="pedido-info">
-                    <span class="pedido-itens">2 itens</span>
-                    <span class="pedido-total">R$ 30,00</span>
-                </div>
-            </div>
-            <div class="card-pedido"></div>
-            <div class="card-pedido"></div>
-            <div class="card-pedido"></div>
-            <div class="card-pedido"></div>
         </div>
         <div class="telaprodutos">
             <div class="header">
-                <input type="text" class="input-busca" placeholder="Buscar Produto">
+                <input type="text" class="input-busca" placeholder="Buscar Produto" oninput="filtrarProdutos()">
                 <button class="botao-buscar">Buscar</button>
             </div>
             <div class="comidas">
@@ -221,13 +208,55 @@
             <div class="bebidas">
                 <h2>Bebidas</h2>
                 <div class="listahorizontalbebidas">
-                    <div class="card-produto"></div>
-                    <div class="card-produto"></div>
-                    <div class="card-produto"></div>
-                    <div class="card-produto"></div>
-                    <div class="card-produto"></div>
-                    <div class="card-produto"></div>
-                    <div class="card-produto"></div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(27,'Guaravita', 3.50)">
+                        <div class="imagem-produto"><img src="../static/guaravita.png" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">Guaravita</span>
+                            <span class="preco-produto">R$3,00</span>
+                        </div>
+                    </div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(28,'Lata', 7.00)">
+                        <div class="imagem-produto"><img src="../static/cocalata.jpg" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">Lata</span>
+                            <span class="preco-produto">R$7,00</span>
+                        </div>
+                    </div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(29,'Refri KS', 5.00)">
+                        <div class="imagem-produto"><img src="../static/cocaks.jpg" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">Refri KS</span>
+                            <span class="preco-produto">R$5,00</span>
+                        </div>
+                    </div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(30,'2 Litros', 13.00)">
+                        <div class="imagem-produto"><img src="../static/2litros.jpg" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">2 Litros</span>
+                            <span class="preco-produto">R$13,00</span>
+                        </div>
+                    </div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(31,'Guaraviton', 5.00)">
+                        <div class="imagem-produto"><img src="../static/guaraviton.png" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">Guaraviton</span>
+                            <span class="preco-produto">R$5,00</span>
+                        </div>
+                    </div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(32,'Agua com Gás', 3.50)">
+                        <div class="imagem-produto"><img src="../static/aguac.png" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">Agua com Gás</span>
+                            <span class="preco-produto">R$3,50</span>
+                        </div>
+                    </div>
+                    <div class="card-produto" onclick="adicionaraocarrinho(33,'Agua sem Gás', 3.00)">
+                        <div class="imagem-produto"><img src="../static/agua.png" alt=""></div>
+                        <div class="info-produto">
+                            <span class="nome-produto">Agua sem Gás</span>
+                            <span class="preco-produto">R$3,00</span>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -236,7 +265,7 @@
                 <h2>Taxas de Entrega</h2>
                 <div class="listahorizontaltaxas">
                     <!-- Taxa Geral -->
-                    <div class="card-produto">
+                    <div class="card-produto" onclick="adicionaraocarrinho(34,'Entrega Geral', 5.00)">
                         <div class="imagem-produto">🛵</div>
                         <div class="info-produto">
                             <span class="nome-produto">Geral</span>
@@ -244,7 +273,7 @@
                         </div>
                     </div>
                     <!-- Taxa Morros -->
-                    <div class="card-produto">
+                    <div class="card-produto" onclick="adicionaraocarrinho(35,'Entrega Morros', 8.00)">
                         <div class="imagem-produto">⛰️</div>
                         <div class="info-produto">
                             <span class="nome-produto">Morros</span>
@@ -252,7 +281,7 @@
                         </div>
                     </div>
                     <!-- Taxa Villa -->
-                    <div class="card-produto">
+                    <div class="card-produto" onclick="adicionaraocarrinho(36,'Entrega Villa', 10.00)">
                         <div class="imagem-produto">🏘️</div>
                         <div class="info-produto">
                             <span class="nome-produto">Villa</span>
@@ -264,69 +293,25 @@
         </div>
         <div class="telacarrinho">
             <div class="lista-pedido">
-                <div class="item-pedido">
-                    <div class="item-info">
-                        <span class="item-qtd">1x</span>
-                        <span class="item-nome">X-Burguer</span>
-                    </div>
-                    <div>
-                        <span class="item-preco">R$ 25,00</span>
-                    </div>
-                </div>
-                <div class="item-pedido">
-                    <div class="item-info">
-                        <span class="item-qtd">2x</span>
-                        <span class="item-nome">Coca-Cola</span>
-                    </div>
-                    <div>
-                        <span class="item-preco">R$ 10,00</span>
-                    </div>
-                </div>
             </div>
             <div class="resumo-pedido">
-                <div class="total-texto">Total: <strong>R$ 30,00</strong></div>
-                <button class="botao-confirmar">Confirmar pedido</button>
+                <div class="total-texto">Total: <strong>R$ 0,00</strong></div>
+                <button class="botao-confirmar" onclick="enviarPedido()">Confirmar pedido</button>
             </div>
         </div>
     </div>
-    <script>
-        let carrinho = []
-        function adicionaraocarrinho(id, nome, preco) {
-            let itemexistente = carrinho.find(item => item.id === id);
-            if (itemexistente) {
-                itemexistente.quantidade += 1;
-            } else {
-                carrinho.push({
-                    id: id,
-                    nome: nome,
-                    preco: preco,
-                    quantidade: 1
-                })
-            }
-            atualizartelacarrinho()
-        }
-        function atualizartelacarrinho() {
-            let divlista = document.querySelector('.lista-pedido')
-            let divtotal = document.querySelector('.total-texto strong')
-            divlista.innerHTML = ''
-            let valortotal = 0
-            carrinho.forEach(item => {
-                valortotal += (item.preco * item.quantidade)
-                let htmldoitem = `
-                    <div class="item-pedido">
-                        <div class="item-info">
-                            <span class="item-qtd">${item.quantidade}x</span>
-                            <span class="item-nome">${item.nome}</span>
-                        </div>
-                        <div>
-                            <span class="item-preco">R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</span>
-                        </div>
-                    </div>`
-                divlista.innerHTML += htmldoitem
-            })
-            divtotal.innerHTML = `R$ ${valortotal.toFixed(2).replace('.', ',')}`
-        }
-    </script>
+    <div id="modal-pedido" class="modal-fundo" style="display: none;">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h2>Detalhes do Pedido</h2>
+                <span class="btn-fechar" onclick="fecharModal()">X</span>
+            </div>
+            <div id="lista-detalhes" class="lista-detalhes">
+                <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

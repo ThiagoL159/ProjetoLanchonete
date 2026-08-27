@@ -83,26 +83,34 @@ def relatorio_mes(mes):
 
 
 def consulta_pedido(pedido_id):
-    cursor.execute("""SELECT pedidos.id, pedidos.data_hora, pedidos.forma_pagamento, pedidos.valortotal, produtos.nomedoproduto, itens_pedido.quantidade, itens_pedido.valorunitario FROM pedidos
-    JOIN itens_pedido ON pedidos.id = itens_pedido.pedido_id
-    JOIN produtos ON itens_pedido.produto_id = produtos.id
-    WHERE pedidos.id = ?""", (pedido_id,))
+    conexao = sqlite3.connect("banco.db")
+    cursor = conexao.cursor()
+    
+    cursor.execute("""
+        SELECT produtos.nomedoproduto, itens_pedido.quantidade, itens_pedido.valorunitario 
+        FROM pedidos
+        JOIN itens_pedido ON pedidos.id = itens_pedido.pedido_id
+        JOIN produtos ON itens_pedido.produto_id = produtos.id
+        WHERE pedidos.id = ?
+    """, (pedido_id,))
+    
     resultado = cursor.fetchall()
+    conexao.close()
+    
+    return resultado
 
-    id, data_hora, forma_pagamento, valortotal, nomedoproduto, quantidade, valorunitario = resultado[
-        0]
-
-    print(f"""Id do pedido: {id} | Data : {data_hora}""")
-    for linha in resultado:
-        id, data_hora, forma_pagamento, valortotal, nomedoproduto, quantidade, valorunitario = linha
-        print(f"""Qtd: {quantidade} {nomedoproduto} Valor: {valorunitario} """)
-    print(
-        f"""Valor Total: {valortotal} | Forma de pagamento: {forma_pagamento}""")
-    print("\n")
-
+def buscar_ultimos_pedidos():
+    conexao = sqlite3.connect("banco.db")
+    cursor = conexao.cursor()
+    cursor.execute("""SELECT id, strftime('%H%M', data_hora),valortotal 
+    FROM pedidos ORDER BY id DESC LIMIT 10""")
+    resultados = cursor.fetchall()
+    conexao.close()
+    return resultados
 
 def registrar_pedido(forma_pagamento, itens):
-
+    conexao = sqlite3.connect("banco.db")
+    cursor = conexao.cursor()
     valor_total = 0
     for item in itens:
         produto_id, quantidade = item
@@ -124,3 +132,4 @@ def registrar_pedido(forma_pagamento, itens):
                             VALUES (?, ?, ?, ?)""", (pedido_id, produto_id, quantidade, valorunitario))
 
     conexao.commit()
+    conexao.close()
