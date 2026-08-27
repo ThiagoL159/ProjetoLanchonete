@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - PDV Lanchonete</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .tela-relatorio {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header-relatorio {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .header-relatorio select, .header-relatorio input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+            outline: none;
+        }
+        .header-relatorio button {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(255, 87, 34, 0.2);
+            transition: transform 0.2s;
+        }
+        .header-relatorio button:hover {
+            transform: translateY(-2px);
+        }
+        .resultado-relatorio {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            min-height: 300px;
+        }
+        .total-relatorio {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff5722;
+            text-align: right;
+            margin-top: 20px;
+        }
+        .voltar {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="tela-relatorio">
+        <a href="/" class="voltar">← Voltar para o PDV</a>
+        <h2>Consultar Relatórios</h2>
+        
+        <div class="header-relatorio">
+            <select id="tipo-relatorio" onchange="mudarTipoInput()">
+                <option value="dia">Diário</option>
+                <option value="mes">Mensal</option>
+            </select>
+            <input type="date" id="data-input">
+            <button onclick="buscarRelatorio()">Buscar</button>
+        </div>
+
+        <div class="resultado-relatorio">
+            <div class="lista-pedido" id="lista-resultados">
+                <p style="text-align:center; color:#888;">Selecione uma data e clique em buscar.</p>
+            </div>
+            <div class="total-relatorio" id="total-resultado" style="display: none;">
+                Total: R$ 0,00
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mudarTipoInput() {
+            const tipo = document.getElementById('tipo-relatorio').value;
+            const inputData = document.getElementById('data-input');
+            if (tipo === 'dia') {
+                inputData.type = 'date';
+            } else {
+                inputData.type = 'month';
+            }
+        }
+
+        async function buscarRelatorio() {
+            const tipo = document.getElementById('tipo-relatorio').value;
+            const data = document.getElementById('data-input').value;
+            
+            if (!data) {
+                alert("Por favor, selecione uma data ou mês.");
+                return;
+            }
+
+            const url = \`/api/relatorio/\${tipo}/\${data}\`;
+            
+            try {
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                const lista = document.getElementById('lista-resultados');
+                const totalDiv = document.getElementById('total-resultado');
+                
+                lista.innerHTML = '';
+                
+                if (result.pedidos.length === 0) {
+                    lista.innerHTML = '<p style="text-align:center; color:#888;">Nenhum pedido encontrado para esta data.</p>';
+                    totalDiv.style.display = 'none';
+                    return;
+                }
+                
+                result.pedidos.forEach(pedido => {
+                    const div = document.createElement('div');
+                    div.className = 'item-pedido';
+                    div.innerHTML = \`
+                        <div class="item-info">
+                            <span class="item-nome">Pagamento: \${pedido.forma_pagamento}</span>
+                        </div>
+                        <div style="display:flex; gap: 20px; align-items:center;">
+                            <span style="font-size: 13px; color: #888;">\${pedido.data_hora}</span>
+                            <span class="item-preco">R$ \${pedido.valor.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    \`;
+                    lista.appendChild(div);
+                });
+                
+                totalDiv.innerHTML = \`Total: R$ \${result.total.toFixed(2).replace('.', ',')}\`;
+                totalDiv.style.display = 'block';
+                
+            } catch (error) {
+                console.error("Erro ao buscar relatório:", error);
+                alert("Ocorreu um erro ao buscar o relatório.");
+            }
+        }
+    </script>
+</body>
+</html>

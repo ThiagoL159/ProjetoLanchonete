@@ -139,3 +139,69 @@ function detalhesdopedido(id) {
         })
         .catch(erro => console.error("Erro no modal:", erro));
 }
+
+function abrirModalRelatorio() {
+    document.getElementById('modal-relatorio').style.display = 'flex';
+}
+
+function fecharModalRelatorio() {
+    document.getElementById('modal-relatorio').style.display = 'none';
+}
+
+function mudarTipoInput() {
+    let tipo = document.getElementById('tipo-relatorio').value;
+    let inputData = document.getElementById('data-input');
+    if (tipo === 'dia') {
+        inputData.type = 'date';
+    } else {
+        inputData.type = 'month';
+    }
+}
+
+async function buscarRelatorio() {
+    let tipo = document.getElementById('tipo-relatorio').value;
+    let data = document.getElementById('data-input').value;
+    
+    if (!data) {
+        alert("Por favor, selecione uma data ou mês.");
+        return;
+    }
+
+    let url = `/api/relatorio/${tipo}/${data}`;
+    
+    try {
+        let response = await fetch(url);
+        let result = await response.json();
+        
+        let lista = document.getElementById('lista-resultados-relatorio');
+        let totalDiv = document.getElementById('total-resultado-relatorio');
+        
+        lista.innerHTML = '';
+        
+        if (result.pedidos.length === 0) {
+            lista.innerHTML = '<p style="text-align:center; color:#888;">Nenhum pedido encontrado para esta data.</p>';
+            totalDiv.style.display = 'none';
+            return;
+        }
+        
+        result.pedidos.forEach(pedido => {
+            let div = document.createElement('div');
+            div.className = 'item-detalhe';
+            div.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <span style="font-size: 12px; color: #888;">${pedido.data_hora}</span>
+                    <span><strong>Pagamento:</strong> ${pedido.forma_pagamento}</span>
+                </div>
+                <span><strong>R$ ${pedido.valor.toFixed(2).replace('.', ',')}</strong></span>
+            `;
+            lista.appendChild(div);
+        });
+        
+        totalDiv.querySelector('strong').innerHTML = `R$ ${result.total.toFixed(2).replace('.', ',')}`;
+        totalDiv.style.display = 'block';
+        
+    } catch (error) {
+        console.error("Erro ao buscar relatório:", error);
+        alert("Ocorreu um erro ao buscar o relatório.");
+    }
+}

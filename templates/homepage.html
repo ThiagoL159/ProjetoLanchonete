@@ -16,7 +16,7 @@
         <div class="telaprodutos">
             <div class="header">
                 <input type="text" class="input-busca" placeholder="Buscar Produto" oninput="filtrarProdutos()">
-                <button class="botao-buscar">Buscar</button>
+                <button class="botao-buscar" onclick="abrirModalRelatorio()">Relatório</button>
             </div>
             <div class="comidas">
                 <h2>Comidas</h2>
@@ -308,6 +308,32 @@
             </div>
             <div id="lista-detalhes" class="lista-detalhes">
                 <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-relatorio" class="modal-fundo" style="display: none;">
+        <div class="modal-conteudo" style="width: 600px; max-height: 90vh;">
+            <div class="modal-cabecalho">
+                <h2>Consultar Relatórios</h2>
+                <span class="btn-fechar" onclick="fecharModalRelatorio()">X</span>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <select id="tipo-relatorio" onchange="mudarTipoInput()" style="padding: 10px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <option value="dia">Diário</option>
+                    <option value="mes">Mensal</option>
+                </select>
+                <input type="date" id="data-input" style="padding: 10px; border-radius: 8px; border: 1px solid #e0e0e0; flex-grow: 1; outline: none;">
+                <button class="botao-confirmar" style="padding: 10px 20px; font-size: 14px;" onclick="buscarRelatorio()">Buscar</button>
+            </div>
+
+            <div class="lista-detalhes" id="lista-resultados-relatorio" style="flex-grow: 1; max-height: 400px; overflow-y: auto;">
+                <p style="text-align:center; color:#888;">Selecione uma data e clique em buscar.</p>
+            </div>
+            
+            <div style="text-align: right; margin-top: 15px; display: none;" id="total-resultado-relatorio">
+                <span class="total-texto" style="font-size: 20px;">Total: <strong>R$ 0,00</strong></span>
             </div>
         </div>
     </div>

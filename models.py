@@ -69,16 +69,22 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS itens_pedido (
 
 
 def relatorio_dia(dia):
+    conexao = sqlite3.connect("banco.db")
+    cursor = conexao.cursor()
     cursor.execute(
         """SELECT valortotal, forma_pagamento, data_hora FROM pedidos WHERE date(data_hora) = date(?)""", (dia,))
     res = cursor.fetchall()
+    conexao.close()
     return res
 
 
 def relatorio_mes(mes):
+    conexao = sqlite3.connect("banco.db")
+    cursor = conexao.cursor()
     cursor.execute(
-        "SELECT valortotal, forma_pagamento, data_hora FROM pedidos WHERE strftime('%y-%m', data_hora) = strftime('%y-%m', ?)", (mes,))
+        "SELECT valortotal, forma_pagamento, data_hora FROM pedidos WHERE strftime('%Y-%m', data_hora) = strftime('%Y-%m', ?)", (mes,))
     resultado = cursor.fetchall()
+    conexao.close()
     return resultado
 
 

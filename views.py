@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from models import registrar_pedido, buscar_ultimos_pedidos, consulta_pedido
+from models import registrar_pedido, buscar_ultimos_pedidos, consulta_pedido, relatorio_dia, relatorio_mes
 app = Flask(__name__)
 
 
@@ -15,7 +15,38 @@ def pedid():
 
 @app.route("/relatorio")
 def relator():
-    return "Relatorios dia e mes"
+    return render_template("relatorio.html")
+
+@app.route("/api/relatorio/dia/<string:data>")
+def get_relatorio_dia(data):
+    resultados = relatorio_dia(data)
+    pedidos_formatados = []
+    total = 0
+    for res in resultados:
+        valor, forma_pgto, hora = res
+        pedidos_formatados.append({
+            "valor": valor,
+            "forma_pagamento": forma_pgto,
+            "data_hora": hora
+        })
+        total += valor
+    return jsonify({"pedidos": pedidos_formatados, "total": total})
+
+@app.route("/api/relatorio/mes/<string:mes>")
+def get_relatorio_mes(mes):
+    # mes vem no formato YYYY-MM
+    resultados = relatorio_mes(mes + "-01")
+    pedidos_formatados = []
+    total = 0
+    for res in resultados:
+        valor, forma_pgto, hora = res
+        pedidos_formatados.append({
+            "valor": valor,
+            "forma_pagamento": forma_pgto,
+            "data_hora": hora
+        })
+        total += valor
+    return jsonify({"pedidos": pedidos_formatados, "total": total})
 
 @app.route("/api/pedido", methods=["POST"])
 def receber_pedido():
